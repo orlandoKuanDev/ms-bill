@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @Document(collection = "bills_type")
@@ -18,6 +17,4 @@ public class BillType {
     private String id;
     @NotBlank
     private String name;
-    @Valid
-    private Commission billTypeDetails;
 }
