@@ -10,6 +10,6 @@ public class WebClientConfig {
     @Bean
     @LoadBalanced
     public WebClient.Builder registrarWebClient() {
-        return WebClient.builder().baseUrl("http://SERVICE-RETIRE/retire");
+        return WebClient.builder().baseUrl("http://SERVICE-TRANSACTION/transaction");
     }
 }

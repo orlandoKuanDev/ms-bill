@@ -17,7 +17,7 @@ public class RouterConfig {
                 .andRoute(GET("/bill/{id}"), handler::findById)
                 .andRoute(GET("/bill/acc/{accountNumber}"), handler::findByAccountNumber)
                 .andRoute(POST("/bill"), handler::save)
-                .andRoute(PUT("/bill/update"), handler::update);
+                .andRoute(POST("/bill/update"), handler::update);
 
     }
 

@@ -3,6 +3,7 @@ import static org.springframework.http.MediaType.*;
 
 import com.example.mspasives.models.entities.Bill;
 import com.example.mspasives.services.BillService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Slf4j(topic = "BILL_HANDLER")
 public class BillHandler {
 
     @Autowired
@@ -67,12 +69,21 @@ public class BillHandler {
 
     public Mono<ServerResponse> update(ServerRequest request){
         Mono<Bill> bill = request.bodyToMono(Bill.class);
-        return bill.flatMap(billUpdate -> billService.update(billUpdate))
-                .flatMap(billUpdate -> ServerResponse.created(URI.create("/bill/".concat(billUpdate.getId())))
+        log.info("BILL_FROM_RETIRE {}", bill);
+        return bill.flatMap(billEdit -> billService.findByAccountNumber(billEdit.getAccountNumber())
+                        .flatMap(currentBill -> {
+                            currentBill.setAccountNumber(billEdit.getAccountNumber());
+                            currentBill.setBalance(billEdit.getBalance());
+                            currentBill.setDateOpened(null);
+                            currentBill.setLimitMovementsMonth(10);
+                            return billService.update(currentBill);
+                        })).flatMap(billUpdate -> ServerResponse.created(URI.create("/bill/".concat(billUpdate.getId())))
                         .contentType(APPLICATION_JSON)
                         .bodyValue(billUpdate))
                 .onErrorResume(e -> Mono.error(new RuntimeException("Error update bill")));
     }
+
+
 
     private Mono<ServerResponse> errorHandler(Mono<ServerResponse> response){
         return response.onErrorResume(error -> {
