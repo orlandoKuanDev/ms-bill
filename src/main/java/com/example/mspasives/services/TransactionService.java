@@ -1,5 +1,6 @@
 package com.example.mspasives.services;
 
+import com.example.mspasives.exception.webclient.ArgumentWebClientNotValid;
 import com.example.mspasives.models.entities.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,10 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+
+import java.util.Collections;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Service
 public class TransactionService {
@@ -33,6 +38,19 @@ public class TransactionService {
                 .onStatus(HttpStatus::isError, response -> {
                     logTraceResponse(logger, response);
                     return Mono.error(new RuntimeException("THE BILL UPDATE FAILED"));
+                })
+                .bodyToMono(Transaction.class);
+    }
+
+    public Mono<Transaction> findByAccountNumber(String accountNumber) {
+        return webClientBuilder.build().get().uri("/acc/{accountNumber}", Collections.singletonMap("accountNumber", accountNumber))
+                .accept(APPLICATION_JSON)
+                .retrieve()
+                .onStatus(HttpStatus::isError, response -> {
+                    logTraceResponse(logger, response);
+                    return Mono.error(new ArgumentWebClientNotValid(
+                            String.format("THE ACCOUNT NUMBER DONT EXIST IN MICRO SERVICE BILL-> %s", accountNumber)
+                    ));
                 })
                 .bodyToMono(Transaction.class);
     }

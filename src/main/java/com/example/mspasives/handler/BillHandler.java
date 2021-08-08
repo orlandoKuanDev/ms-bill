@@ -2,7 +2,9 @@ package com.example.mspasives.handler;
 import static org.springframework.http.MediaType.*;
 
 import com.example.mspasives.models.entities.Bill;
+import com.example.mspasives.models.entities.Transaction;
 import com.example.mspasives.services.BillService;
+import com.example.mspasives.services.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ public class BillHandler {
 
     @Autowired
     private BillService billService;
+    @Autowired
+    private TransactionService transactionService;
 
     public Mono<ServerResponse> findAll(ServerRequest request){
         return ServerResponse.ok().contentType(APPLICATION_JSON)
@@ -82,8 +86,6 @@ public class BillHandler {
                         .bodyValue(billUpdate))
                 .onErrorResume(e -> Mono.error(new RuntimeException("Error update bill")));
     }
-
-
 
     private Mono<ServerResponse> errorHandler(Mono<ServerResponse> response){
         return response.onErrorResume(error -> {
