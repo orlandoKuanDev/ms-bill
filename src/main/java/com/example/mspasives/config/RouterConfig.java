@@ -15,7 +15,9 @@ public class RouterConfig {
     public RouterFunction<ServerResponse> rutas(BillHandler handler){
         return route(GET("/bill"), handler::findAll)
                 .andRoute(GET("/bill/{id}"), handler::findById)
-                .andRoute(POST("/bill"), handler::save);
+                .andRoute(GET("/bill/acc/{accountNumber}"), handler::findByAccountNumber)
+                .andRoute(POST("/bill"), handler::save)
+                .andRoute(PUT("/bill/update"), handler::update);
 
     }
 

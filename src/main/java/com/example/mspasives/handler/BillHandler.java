@@ -23,16 +23,26 @@ public class BillHandler {
     private BillService billService;
 
     public Mono<ServerResponse> findAll(ServerRequest request){
-        return ServerResponse.ok().contentType(APPLICATION_JSON_UTF8)
-                .body(billService.find(), Bill.class);
+        return ServerResponse.ok().contentType(APPLICATION_JSON)
+                .body(billService.findAll(), Bill.class);
     }
 
     public Mono<ServerResponse> findById(ServerRequest request){
         String id = request.pathVariable("id");
         return errorHandler(
                 billService.findById(id).flatMap(p -> ServerResponse.ok()
-                                .contentType(APPLICATION_JSON_UTF8)
-                                .syncBody(p))
+                                .contentType(APPLICATION_JSON)
+                                .bodyValue(p))
+                        .switchIfEmpty(ServerResponse.notFound().build())
+        );
+    }
+
+    public Mono<ServerResponse> findByAccountNumber(ServerRequest request){
+        String accountNumber = request.pathVariable("accountNumber");
+        return errorHandler(
+                billService.findByAccountNumber(accountNumber).flatMap(p -> ServerResponse.ok()
+                                .contentType(APPLICATION_JSON)
+                                .bodyValue(p))
                         .switchIfEmpty(ServerResponse.notFound().build())
         );
     }
@@ -40,19 +50,28 @@ public class BillHandler {
     public Mono<ServerResponse> save(ServerRequest request){
         Mono<Bill> bill = request.bodyToMono(Bill.class);
         return bill.flatMap(p-> {
-                    return billService.save(p);
-                }).flatMap(p -> ServerResponse.created(URI.create("/api/client/".concat(p.getId())))
-                        .contentType(APPLICATION_JSON_UTF8)
-                        .syncBody(p))
+                    return billService.create(p);
+                }).flatMap(p -> ServerResponse.created(URI.create("/bill/".concat(p.getId())))
+                        .contentType(APPLICATION_JSON)
+                        .bodyValue(p))
                 .onErrorResume(error -> {
                     WebClientResponseException errorResponse = (WebClientResponseException) error;
                     if(errorResponse.getStatusCode() == HttpStatus.BAD_REQUEST) {
                         return ServerResponse.badRequest()
-                                .contentType(APPLICATION_JSON_UTF8)
-                                .syncBody(errorResponse.getResponseBodyAsString());
+                                .contentType(APPLICATION_JSON)
+                                .bodyValue(errorResponse.getResponseBodyAsString());
                     }
                     return Mono.error(errorResponse);
                 });
+    }
+
+    public Mono<ServerResponse> update(ServerRequest request){
+        Mono<Bill> bill = request.bodyToMono(Bill.class);
+        return bill.flatMap(billUpdate -> billService.update(billUpdate))
+                .flatMap(billUpdate -> ServerResponse.created(URI.create("/bill/".concat(billUpdate.getId())))
+                        .contentType(APPLICATION_JSON)
+                        .bodyValue(billUpdate))
+                .onErrorResume(e -> Mono.error(new RuntimeException("Error update bill")));
     }
 
     private Mono<ServerResponse> errorHandler(Mono<ServerResponse> response){

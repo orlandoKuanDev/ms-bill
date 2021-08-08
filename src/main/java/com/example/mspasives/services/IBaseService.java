@@ -3,7 +3,7 @@ package com.example.mspasives.services;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface ICRUDService<T, ID> {
+public interface IBaseService<T, ID> {
 
     Mono<T> create(T o);
 

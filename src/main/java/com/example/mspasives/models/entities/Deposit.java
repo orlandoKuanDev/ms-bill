@@ -22,11 +22,11 @@ public class Deposit {
     @Id
     private String id;
 
-    @Field(name = "account")
+    @Field(name = "bill")
     private Bill bill;
 
-    @Field(name = "amount")
-    private Double amount;
+    @Field(name = "depositAmount")
+    private Double depositAmount;
 
     @Field(name = "description")
     private String description;

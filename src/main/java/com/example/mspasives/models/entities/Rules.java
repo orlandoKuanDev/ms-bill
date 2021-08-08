@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Condition {
+public class Rules {
 
     private Integer monthlyTransactionLimit;
 

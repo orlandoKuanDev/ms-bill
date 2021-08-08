@@ -4,7 +4,7 @@ import com.example.mspasives.repositories.IRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public abstract class BaseService <T, ID> implements ICRUDService<T, ID>{
+public abstract class BaseService <T, ID> implements IBaseService<T, ID> {
 
     protected abstract IRepository<T, ID> getRepository();
 

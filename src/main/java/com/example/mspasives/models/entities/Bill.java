@@ -1,6 +1,7 @@
 package com.example.mspasives.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-@Document(collection = "bills")
+@Document(collection = "bill")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,12 +27,11 @@ public class Bill {
 
     @Field(name = "dateOpened")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dateOpened;
+    private LocalDateTime dateOpened = LocalDateTime.now();;
 
-    @Field(name = "dateClosed")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dateClosed;
+    @Field(name = "balance")
+    private double balance;
 
-    @Field(name = "currentBalance")
-    private double currentBalance;
+    @Field(name = "limitMovementsMonth")
+    private int limitMovementsMonth;
 }
