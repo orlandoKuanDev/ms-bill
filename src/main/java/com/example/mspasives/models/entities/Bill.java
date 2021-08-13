@@ -3,6 +3,7 @@ package com.example.mspasives.models.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -15,9 +16,7 @@ import java.time.LocalDateTime;
 
 @Document(collection = "bill")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 public class Bill {
     @Id
     private String id;
