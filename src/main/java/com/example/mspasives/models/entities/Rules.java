@@ -1,11 +1,14 @@
 package com.example.mspasives.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Rules {
-    private Integer monthlyTransactionLimit;
+
+    private String customerType;
+    private boolean commissionMaintenance;
+
+    private boolean maximumLimitMonthlyMovements;
+    private Integer maximumLimitMonthlyMovementsQuantity;
 }
