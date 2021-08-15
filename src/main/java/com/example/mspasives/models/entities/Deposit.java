@@ -13,15 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Document(collection = "deposit")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class Deposit {
-    @Id
-    private String id;
-
     @Field(name = "bill")
     private Bill bill;
 

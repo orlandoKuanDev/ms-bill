@@ -11,15 +11,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
-@Document(collection = "retire")
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Builder
 public class Retire {
-    @Id
-    private String id;
-
     @Field(name = "bill")
     private Bill bill;
 

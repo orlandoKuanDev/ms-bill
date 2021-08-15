@@ -11,7 +11,6 @@ import javax.validation.constraints.Size;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class Customer {
-    @NotBlank
     @Field(name = "customerIdentityType")
     private String customerIdentityType;
     @Field(name = "customerIdentityNumber")

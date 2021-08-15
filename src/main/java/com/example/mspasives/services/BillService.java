@@ -28,4 +28,9 @@ public class BillService extends BaseService<Bill, String> implements IBillServi
         return repository.findByAccountNumber(accountNumber);
     }
 
+    @Override
+    public Mono<Bill> findByAcquisitionCardNumber(String cardNumber) {
+        return repository.findByAcquisitionCardNumber(cardNumber);
+    }
+
 }

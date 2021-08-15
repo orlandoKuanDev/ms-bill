@@ -7,4 +7,5 @@ import reactor.core.publisher.Mono;
 
 public interface IBillService extends IBaseService<Bill, String>{
     Mono<Bill> findByAccountNumber(String accountNumber);
+    Mono<Bill> findByAcquisitionCardNumber(String cardNumber);
 }

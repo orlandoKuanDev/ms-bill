@@ -53,6 +53,14 @@ public class BillHandler {
         );
     }
 
+    public Mono<ServerResponse> findByCardNumber(ServerRequest request){
+        String cardNumber = request.pathVariable("cardNumber");
+        return billService.findByAcquisitionCardNumber(cardNumber).flatMap(p -> ServerResponse.ok()
+                        .contentType(APPLICATION_JSON)
+                        .bodyValue(p))
+                .switchIfEmpty(ServerResponse.notFound().build());
+    }
+
     public Mono<ServerResponse> save(ServerRequest request){
         Mono<Bill> bill = request.bodyToMono(Bill.class);
         return bill.flatMap(p-> {
@@ -78,8 +86,9 @@ public class BillHandler {
                         .flatMap(currentBill -> {
                             currentBill.setAccountNumber(billEdit.getAccountNumber());
                             currentBill.setBalance(billEdit.getBalance());
-                            currentBill.setDateOpened(null);
+                            currentBill.setDateOpened(currentBill.getDateOpened());
                             currentBill.setLimitMovementsMonth(10);
+                            currentBill.setAcquisition(billEdit.getAcquisition());
                             return billService.update(currentBill);
                         })).flatMap(billUpdate -> ServerResponse.created(URI.create("/bill/".concat(billUpdate.getId())))
                         .contentType(APPLICATION_JSON)
