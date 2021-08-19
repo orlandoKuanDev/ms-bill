@@ -29,8 +29,8 @@ public class BillService extends BaseService<Bill, String> implements IBillServi
     }
 
     @Override
-    public Mono<Bill> findByAcquisitionCardNumber(String cardNumber) {
-        return repository.findByAcquisitionCardNumber(cardNumber);
+    public Mono<Bill> findByAcquisitionIban(String iban) {
+        return repository.findByAcquisitionIban(iban);
     }
 
 }

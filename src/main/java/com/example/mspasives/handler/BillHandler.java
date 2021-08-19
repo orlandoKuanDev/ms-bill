@@ -53,9 +53,9 @@ public class BillHandler {
         );
     }
 
-    public Mono<ServerResponse> findByCardNumber(ServerRequest request){
-        String cardNumber = request.pathVariable("cardNumber");
-        return billService.findByAcquisitionCardNumber(cardNumber).flatMap(p -> ServerResponse.ok()
+    public Mono<ServerResponse> findByIban(ServerRequest request){
+        String iban = request.pathVariable("iban");
+        return billService.findByAcquisitionIban(iban).flatMap(p -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON)
                         .bodyValue(p))
                 .switchIfEmpty(ServerResponse.notFound().build());
@@ -87,7 +87,7 @@ public class BillHandler {
                             currentBill.setAccountNumber(billEdit.getAccountNumber());
                             currentBill.setBalance(billEdit.getBalance());
                             currentBill.setDateOpened(currentBill.getDateOpened());
-                            currentBill.setLimitMovementsMonth(10);
+                            currentBill.setLimitMovementsMonth(0);
                             currentBill.setAcquisition(billEdit.getAcquisition());
                             return billService.update(currentBill);
                         })).flatMap(billUpdate -> ServerResponse.created(URI.create("/bill/".concat(billUpdate.getId())))
