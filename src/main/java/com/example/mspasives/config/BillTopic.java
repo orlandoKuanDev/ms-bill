@@ -20,7 +20,7 @@ public class BillTopic {
     public NewTopic createdAccountTopic() {
 
         return TopicBuilder
-                .name("created-bill-topic")
+                .name("service-bill-topic")
                 .partitions(1)
                 .replicas(1)
                 .build();
